@@ -1,13 +1,74 @@
-# a comment - dòng này được bỏ qua
-# không theo dõi tập tin có đuôi .a 
-*.a
-# nhưng theo dõi tập lib.a, mặc dù bạn đang bỏ qua tất cả tập tin .a ở trên
-!lib.a
-# chỉ bỏ qua tập TODO ở thư mục gốc, chứ không phải ở các thư mục con subdir/TODO
-/TODO
-# bỏ qua tất cả tập tin trong thư mục build/
-build/
-# bỏ qua doc/notes.txt, không phải doc/server/arch.txt
-doc/*.txt
-# bỏ qua tất cả tập .txt trong thư mục doc/
-doc/**/*.txt
+node_modules
+npm-debug.log
+yarn-error.log
+coverage/
+.aws-config.json
+awsconfig
+/.awcache
+/dist
+/public/build
+/public/views/index.html
+/emails/dist
+/public_gen
+/public/vendor/npm
+/tmp
+tools/phantomjs/phantomjs
+tools/phantomjs/phantomjs.exe
+profile.out
+coverage.txt
+
+docs/AWS_S3_BUCKET
+docs/GIT_BRANCH
+docs/GITCOMMIT
+docs/changed-files
+
+# locally required config files
+public/css/*.min.css
+
+# Editor junk
+*.sublime-workspace
+*.swp
+.idea/
+*.iml
+*.tmp
+.DS_Store
+.vscode/
+.vs/
+
+/data/*
+/bin/*
+
+conf/custom.ini
+fig.yml
+docker-compose.yml
+docker-compose.yaml
+/conf/provisioning/**/custom.yaml
+/conf/provisioning/**/dev.yaml
+/conf/ldap_dev.toml
+profile.cov
+/grafana
+/local
+.notouch
+/Makefile.local
+/pkg/cmd/grafana-cli/grafana-cli
+/pkg/cmd/grafana-server/grafana-server
+/pkg/cmd/grafana-server/debug
+/pkg/extensions
+debug.test
+/examples/*/dist
+/packaging/**/*.rpm
+/packaging/**/*.deb
+/packaging/**/*.tar.gz
+
+# Ignore OSX indexing
+.DS_Store
+
+/vendor/**/*.py
+/vendor/**/*.xml
+/vendor/**/*.yml
+/vendor/**/*_test.go
+/vendor/**/.editorconfig
+/vendor/**/appengine*
+*.orig
+
+/devenv/bulk-dashboards/*.json
