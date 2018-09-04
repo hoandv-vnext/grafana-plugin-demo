@@ -1,56 +1,54 @@
-'use strict';
-module.exports = function (grunt) {
-  var os = require('os');
-  var config = {
-    pkg: grunt.file.readJSON('package.json'),
-    baseDir: '.',
-    srcDir: 'public',
-    genDir: 'public_gen',
-    destDir: 'dist',
-    tempDir: 'tmp',
-    platform: process.platform.replace('win32', 'windows'),
-  };
+module.exports = function(grunt) {
 
-  if (grunt.option('platform')) {
-    config.platform = grunt.option('platform');
-  }
-
-  if (grunt.option('arch')) {
-    config.arch = grunt.option('arch');
-  } else {
-    config.arch = os.arch();
-
-    if (process.platform.match(/^win/)) {
-      config.arch = process.env.hasOwnProperty('ProgramFiles(x86)') ? 'x64' : 'x86';
-    }
-  }
-
-  config.coverage = grunt.option('coverage');
-  config.phjs = grunt.option('phjsToRelease');
-  config.pkg.version = grunt.option('pkgVer') || config.pkg.version;
-
-  console.log('Version', config.pkg.version);
-
-  // load plugins
   require('load-grunt-tasks')(grunt);
 
-  // load task definitions
-  grunt.loadTasks('./scripts/grunt');
+  grunt.loadNpmTasks('grunt-execute');
+  grunt.loadNpmTasks('grunt-contrib-clean');
 
-  // Utility function to load plugin settings into config
-  function loadConfig(config,path) {
-    require('glob').sync('*', {cwd: path}).forEach(function(option) {
-      var key = option.replace(/\.js$/,'');
-      // If key already exists, extend it. It is your responsibility to avoid naming collisions
-      config[key] = config[key] || {};
-      grunt.util._.extend(config[key], require(path + option)(config,grunt));
-    });
-    // technically not required
-    return config;
-  }
+  grunt.initConfig({
 
-  // Merge that object with what with whatever we have here
-  loadConfig(config,'./scripts/grunt/options/');
-  // pass the config to grunt
-  grunt.initConfig(config);
+    clean: ["dist"],
+
+    copy: {
+      src_to_dist: {
+        cwd: 'src',
+        expand: true,
+        src: ['**/*', '!**/*.js', '!**/*.scss'],
+        dest: 'dist'
+      },
+      pluginDef: {
+        expand: true,
+        src: [ 'plugin.json', 'README.md' ],
+        dest: 'dist',
+      }
+    },
+
+    watch: {
+      rebuild_all: {
+        files: ['src/**/*', 'plugin.json'],
+        tasks: ['default'],
+        options: {spawn: false}
+      },
+    },
+
+    babel: {
+      options: {
+        sourceMap: true,
+        presets:  ["es2015"],
+        plugins: ['transform-es2015-modules-systemjs', "transform-es2015-for-of"],
+      },
+      dist: {
+        files: [{
+          cwd: 'src',
+          expand: true,
+          src: ['*.js'],
+          dest: 'dist',
+          ext:'.js'
+        }]
+      },
+    },
+
+  });
+
+  grunt.registerTask('default', ['clean', 'copy:src_to_dist', 'copy:pluginDef', 'babel']);
 };
